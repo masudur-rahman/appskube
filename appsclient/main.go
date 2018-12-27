@@ -1,6 +1,8 @@
 package appsclient
 
 import (
+	kutilAppsV1 "github.com/appscode/kutil/apps/v1"
+	kutilCoreV1 "github.com/appscode/kutil/core/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	extv1beta1 "k8s.io/api/extensions/v1beta1"
@@ -32,17 +34,20 @@ func initiate() *kubernetes.Clientset {
 	return clientset
 }
 
-func CreateDeployment(name string, replicas int32) {
+func CreateDeploymentKutil(name string, replicas int32) {
 
-	log.Println("Creating deployment of AppsCodeServer...\n")
+	log.Println("Creating deployment of AppsCodeServer...")
+
+	//log.Println(name, replicas)
 
 	kubeconfig := initiate()
 
-	varAppsV1 := kubeconfig.AppsV1()
+	//varAppsV1 := kubeconfig.AppsV1()
 
 	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
+			Namespace: "default",
 			Labels: map[string]string{
 				"api": "latest",
 			},
@@ -82,7 +87,14 @@ func CreateDeployment(name string, replicas int32) {
 		},
 	}
 
-	_, err := varAppsV1.Deployments("default").Create(deployment)
+	_, _, err := kutilAppsV1.CreateOrPatchDeployment(
+		kubeconfig,
+		deployment.ObjectMeta,
+		func(d *appsv1.Deployment) *appsv1.Deployment {
+			d=deployment
+			return d
+		},
+	)
 
 	if err != nil {
 		panic(err)
@@ -91,15 +103,15 @@ func CreateDeployment(name string, replicas int32) {
 	log.Printf("Deployment `%s` created successfully...!\n", name)
 }
 
-func CreateService(name string) {
+func CreateServiceKutil(name string) {
 	log.Printf("Creating service `%s` ...\n", name)
 
 	kubeconfig := initiate()
-	varCoreV1 := kubeconfig.CoreV1()
 
 	service := &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
+			Namespace: "default",
 			Labels: map[string]string{
 				"api": "latest",
 			},
@@ -110,16 +122,25 @@ func CreateService(name string) {
 			},
 			Ports: []corev1.ServicePort{
 				{
-					Port: 8080,
+					Port:       8080,
 					TargetPort: intstr.FromInt(8080),
-					Protocol: "TCP",
+					Protocol:   "TCP",
 				},
 			},
 			Type: "NodePort",
 		},
 	}
 
-	_, err := varCoreV1.Services("default").Create(service)
+	_, _, err := kutilCoreV1.CreateOrPatchService(
+		kubeconfig,
+		service.ObjectMeta,
+		func(s *corev1.Service) *corev1.Service {
+			s = service
+			return s
+		},
+	)
+
+	//oneliners.PrettyJson(svc)
 
 	if err != nil {
 		panic(err)
@@ -128,7 +149,7 @@ func CreateService(name string) {
 	log.Printf("Created service `%s` successfully\n", name)
 }
 
-func UpdateDeployment(name string, replicas int32) {
+func UpdateDeploymentKutil(name string, replicas int32) {
 	log.Printf("Scaling deployment `%s` to %d replicas\n", name, replicas)
 
 	kubeconfig := initiate()
@@ -145,6 +166,15 @@ func UpdateDeployment(name string, replicas int32) {
 
 	_, err = varAppsV1.Deployments("default").Update(deploy)
 
+	_, _, err = kutilAppsV1.PatchDeployment(
+		kubeconfig,
+		deploy,
+		func(d *appsv1.Deployment) *appsv1.Deployment {
+			d = deploy
+			return d
+		},
+	)
+
 	if err != nil {
 		panic(err)
 	}
@@ -160,7 +190,7 @@ func IngressService(host, name string) {
 
 	ingress := &extv1beta1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: "ingress-"+name,
+			Name: "ingress-" + name,
 		},
 		Spec: extv1beta1.IngressSpec{
 			Rules: []extv1beta1.IngressRule{
@@ -193,7 +223,7 @@ func IngressService(host, name string) {
 	log.Printf("Created Ingress of service `%s` successfully\n", name)
 }
 
-func DeleteDeployment(name string){
+func DeleteDeployment(name string) {
 	log.Println("Deleting everything related to this Deployment...")
 
 	kubeconfig := initiate()

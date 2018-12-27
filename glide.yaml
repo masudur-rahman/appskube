@@ -5,7 +5,8 @@ import:
     subpackages:
     - tools/clientcmd
 -   package: k8s.io/api
-
+-   package: github.com/appscode/go
+-   package: github.com/appscode/mergo
 -   package: github.com/appscode/kutil
     subpackages:
       - apps/v1
@@ -27,3 +28,4 @@ import:
     subpackages:
       - kubernetes
       - tools/clientcmd
+-   package: github.com/tamalsaha/go-oneliners

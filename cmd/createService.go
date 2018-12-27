@@ -5,15 +5,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var nameService string
+
 var createService = &cobra.Command{
 	Use:	"expose",
 	Short:	"Creates a Service",
 	Run:	func(cmd *cobra.Command, args []string) {
-		appsclient.CreateService(name)
+		appsclient.CreateServiceKutil(nameService)
 	},
 }
 
 func init() {
-	createService.Flags().StringVarP(&name, "name", "n", "appscode", "Name of the service")
+	createService.Flags().StringVarP(&nameService, "name", "n", "appscode", "Name of the service")
 	rootCmd.AddCommand(createService)
 }

@@ -1,16 +1,28 @@
-hash: abe949a831bf994d7d56f9155115ee77eb9b80f50f468870b75c86b7e0785992
-updated: 2018-12-26T17:22:29.92973151+06:00
+hash: 17bda94dcc7f7fb737b3233e1afac1350bb73c74650aebb60db65c5691cb5eba
+updated: 2018-12-27T15:15:35.508129539+06:00
 imports:
+- name: github.com/appscode/go
+  version: 584aaa73af837f112c0a471be398ea837341c330
+  subpackages:
+  - types
 - name: github.com/appscode/kutil
-  version: d9fb2e606bf2c196a8cd8cff13097f531d686a44
+  version: 6546fe6e8bde14cda08b0415f926cbed47d66e6a
   subpackages:
   - apps/v1
   - core/v1
+- name: github.com/appscode/mergo
+  version: 9f23e2d6bd2a77f959b2bf6acdbefd708a83a4a4
+- name: github.com/davecgh/go-spew
+  version: 782f4967f2dc4564575ca782fe2d04090b5faca8
+  subpackages:
+  - spew
 - name: github.com/gogo/protobuf
   version: 342cbe0a04158f6dcb03ca0079991a51a4248c02
   subpackages:
   - proto
   - sortkeys
+- name: github.com/golang/glog
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
   version: b4deda0973fb4c70b50d226b1af49f3da59f5265
   subpackages:
@@ -45,10 +57,14 @@ imports:
   version: 94122c33edd36123c84d5368cfb2b69df93a0ec8
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
+- name: github.com/pkg/errors
+  version: 059132a15dd08d6704c67711dae0cf35ab991756
 - name: github.com/spf13/cobra
   version: ef82de70bb3f60c65fb8eebacbb2d122ef517385
 - name: github.com/spf13/pflag
   version: 583c0c0531f06d5278b7d917446061adc344b5cd
+- name: github.com/tamalsaha/go-oneliners
+  version: 82a97ec58df4809a2bc57ebbbcc1e6a2feb78111
 - name: golang.org/x/crypto
   version: de0752318171da717af4ce24d0a2e8626afaeb11
   subpackages:
@@ -134,7 +150,7 @@ imports:
   - storage/v1alpha1
   - storage/v1beta1
 - name: k8s.io/apimachinery
-  version: 98853ca904e81a25e2000cae7f077dc30f81b85f
+  version: 2b1284ed4c93a43499e781493253e2ac5959c4fd
   subpackages:
   - pkg/api/errors
   - pkg/api/meta
@@ -161,16 +177,19 @@ imports:
   - pkg/util/framer
   - pkg/util/intstr
   - pkg/util/json
+  - pkg/util/mergepatch
   - pkg/util/naming
   - pkg/util/net
   - pkg/util/runtime
   - pkg/util/sets
+  - pkg/util/strategicpatch
   - pkg/util/validation
   - pkg/util/validation/field
   - pkg/util/wait
   - pkg/util/yaml
   - pkg/version
   - pkg/watch
+  - third_party/forked/golang/json
   - third_party/forked/golang/reflect
 - name: k8s.io/client-go
   version: e64494209f554a6723674bd494d69445fb76a1d4
@@ -232,6 +251,10 @@ imports:
   - util/integer
 - name: k8s.io/klog
   version: 8139d8cb77af419532b33dfa7dd09fbc5f1d344f
+- name: k8s.io/kube-openapi
+  version: c59034cc13d587f5ef4e85ca0ade0c1866ae8e1d
+  subpackages:
+  - pkg/util/proto
 - name: sigs.k8s.io/yaml
   version: fd68e9863619f6ec2fdd8625fe1f02e7c877e480
 testImports: []

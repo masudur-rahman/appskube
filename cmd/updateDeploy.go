@@ -9,7 +9,7 @@ var updateDeploy = &cobra.Command{
 	Use: 	"scale",
 	Short: 	"Scale to a specific number",
 	Run: 	func(cmd *cobra.Command, args []string) {
-		appsclient.UpdateDeployment(name, replicas)
+		appsclient.UpdateDeploymentKutil(name, replicas)
 	},
 }
 
