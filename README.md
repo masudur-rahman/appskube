@@ -19,5 +19,6 @@ Available commands :
 * `appskube ingress --host=<host-name> --name=<name-of-service>`
 * `appskube delete` - default name="appscode"
 * `appskube delete --name=<name>`
+* `appskube get` - to get every deployment, pod, service and ingress name
 
 

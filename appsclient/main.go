@@ -1,6 +1,7 @@
 package appsclient
 
 import (
+	"fmt"
 	kutilAppsV1 "github.com/appscode/kutil/apps/v1"
 	kutilCoreV1 "github.com/appscode/kutil/core/v1"
 	appsv1 "k8s.io/api/apps/v1"
@@ -221,6 +222,49 @@ func IngressService(host, name string) {
 	}
 
 	log.Printf("Created Ingress of service `%s` successfully\n", name)
+}
+
+func GetDeployment() {
+	kubeconfig := initiate()
+
+	varAppsV1 := kubeconfig.AppsV1()
+	varCoreV1 := kubeconfig.CoreV1()
+	varExtensionV1Beta1 := kubeconfig.ExtensionsV1beta1()
+
+	deployList, err := varAppsV1.Deployments("default").List(metav1.ListOptions{})
+
+	fmt.Println("Deployment list :")
+	for _, deploy := range deployList.Items{
+		fmt.Println("\t", deploy.Name)
+	}
+	fmt.Println()
+
+	podList, err := varCoreV1.Pods("default").List(metav1.ListOptions{})
+	fmt.Println("Pod list :")
+	for _, pod := range podList.Items{
+		fmt.Println("\t", pod.Name)
+	}
+	fmt.Println()
+
+	serviceList, err := varCoreV1.Services("default").List(metav1.ListOptions{})
+	fmt.Println("Service list :")
+	for _, service := range serviceList.Items{
+		fmt.Println("\t", service.Name)
+	}
+	fmt.Println()
+
+	ingressList, err := varExtensionV1Beta1.Ingresses("default").List(metav1.ListOptions{})
+	fmt.Println("Ingress list :")
+	for _, ingress := range ingressList.Items{
+		fmt.Println("\t", ingress.Name)
+	}
+	fmt.Println()
+
+	//oneliners.PrettyJson(deployList)
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func DeleteDeployment(name string) {
