@@ -2,6 +2,7 @@
 
 client-go implementation of `appskube`
 
+At first you have to install **appskube** using `go install` command.
 
 Available commands :
 
