@@ -1,0 +1,166 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+
+metadata:
+    name: ingress-appscode
+
+spec:
+    rules:
+        -   host: software.farm
+            http:
+                paths:
+                    -   path: /
+                        backend:
+                            serviceName: appscode
+                            servicePort: 8080
+                    -   path: /a/
+                        backend:
+                            serviceName: appscode-alpine
+                            servicePort: 8000
+        -   host: software.firm
+            http:
+                paths:
+                    -   backend:
+                            serviceName: appscode-busybox
+                            servicePort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+    name: appscode
+    labels:
+        api: latest
+spec:
+    selector:
+        api: latest
+    ports:
+        -   port: 8080
+            targetPort: 8080
+            protocol: TCP
+    type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+    name: appscode-alpine
+    labels:
+        api: alpine
+spec:
+    selector:
+        api: alpine
+    ports:
+        -   port: 8000
+            targetPort: 8080
+            protocol: TCP
+    type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+    name: appscode-busybox
+    labels:
+        api: busybox
+spec:
+    selector:
+        api: busybox
+    ports:
+        -   port: 8080
+            targetPort: 8080
+            protocol: TCP
+    type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+    name: appscode
+    labels:
+        api: latest
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            api: latest
+    template:
+        metadata:
+            name: appscode
+            labels:
+                api: latest
+        spec:
+            containers:
+                -   name: appscode
+                    image: masudjuly02/appscodeserver
+                    imagePullPolicy: IfNotPresent
+                    ports:
+                        -   name: apps-port
+                            containerPort: 8080
+                            protocol: TCP
+            restartPolicy: Always
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+    name: appscode-alpine
+    labels:
+        api: alpine
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            api: alpine
+    template:
+        metadata:
+            name: appscode-alpine
+            labels:
+                api: alpine
+        spec:
+            containers:
+                -   name: appscode-alpine
+                    image: masudjuly02/appscodeserver:alpine
+                    imagePullPolicy: IfNotPresent
+                    ports:
+                        -   name: apps-port
+                            containerPort: 8080
+                            protocol: TCP
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+    name: appscode-busybox
+    labels:
+        api: busybox
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            api: busybox
+    template:
+        metadata:
+            name: appscode-busybox
+            labels:
+                api: busybox
+        spec:
+            containers:
+                -   name: appscode-busybox
+                    image: masudjuly02/appscodeserver:busybox
+                    imagePullPolicy: IfNotPresent
+                    ports:
+                        -   containerPort: 8080

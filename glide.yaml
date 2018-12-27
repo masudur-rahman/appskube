@@ -1,0 +1,29 @@
+package: github.com/masudur-rahman/appskube
+import:
+-   package: k8s.io/client-go
+    version: v10.0.0
+    subpackages:
+    - tools/clientcmd
+-   package: k8s.io/api
+
+-   package: github.com/appscode/kutil
+    subpackages:
+      - apps/v1
+      - core/v1
+-   package: github.com/spf13/cobra
+    version: v0.0.3
+-   package: k8s.io/api
+    subpackages:
+      - apps/v1
+      - core/v1
+      - extensions/v1beta1
+-   package: k8s.io/apimachinery
+    subpackages:
+      - pkg/apis/meta/v1
+      - pkg/util/intstr
+      - pkg/util/wait
+-   package: k8s.io/client-go
+    version: v10.0.0
+    subpackages:
+      - kubernetes
+      - tools/clientcmd
